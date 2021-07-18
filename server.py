@@ -24,7 +24,7 @@ class TrimForm(FlaskForm):
         ]
     )
     shorturl = StringField(
-        render_kw={"placeholder": "Shortened URL (Optional)"},
+        render_kw={"placeholder": "Shortened URL"},
         validators=[
             alphanumericcheck,
             DataRequired()
