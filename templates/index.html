@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Trim URL</title>
+
+    <meta name="description" content="Shorten URLs">
+    <meta name="keywords" content="URL, Shorten, Shortener">
+
+    <!-- For pretty discord url embeds -->
+    <meta property="og:title" content="TrimURL">
+    <meta property="og:description" content="Shorten URLs">
+
+    <!-- Relative path doesn't work for open graph, will work on later -->
+
+    <!-- <meta property="og:image" content="{{url_for('static', filename='icon.png')}}"> -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <link href="../css/home.css" rel="stylesheet">
+
+    <link rel="icon" type="image/png" href="../static/icon.png">
+    <meta name="theme-color" content="#F7E8E8">
+</head>
+
+<body>
+    <header id="navbar">
+        <img src="../static/icon.png">
+        <nav>
+            <a id="homebutton" class="active" href="#title">Home</a>
+            <a id="aboutbutton" href="#about">About</a>
+            <a id="trimbutton" href="#trim">Trim</a>
+            <a id="contactbutton" href="#contact">Contact</a>
+
+            <!-- Future feature not included in initial commit, will work on later -->
+
+            <!-- <a>Login</a> -->
+
+        </nav>
+    </header>
+    <main>
+        <a class="anchor" id="title"></a>
+        <section id="titlesection">
+            <div class="shade">
+                <img src="../static/icon.png">
+                <h1>Trim URL</h1>
+            </div>
+        </section>
+        <a class="anchor" id="about"></a>
+        <section id="aboutsection">
+            <div>
+                <h2>
+                    About
+                </h2>
+                <div id="information">
+                    <div class="heading">
+                        <h3>How it Works</h3>
+                        <p>We shorten links to make your browsing experience smoother. When our shortened links are entered, we redirect you to the original longer link, hands-free without wait time or ads.</p>
+                    </div>
+                    <div class="heading">
+                        <h3>Customizable Links</h3>
+                        <p>Create links with custom urls to make it easier to remember.</p>
+
+                        <!-- Future features not included in initial commit, will work on later-->
+
+                        <!-- <p>Add an expiry date for your link to stop working at a given date.</p>
+                        <p>Set a user limit to control how many times the link can be used before it stops working.</p>
+                        <p>Set a password to control who can use your trimmed link.</p>
+                        <p>Merge multiple links into one with a custom panel for your visitors to select links from.</p> -->
+
+                    </div>
+                    <div class="heading">
+                        <h3>Feature Requests</h3>
+                        <p>We are looking for your feedback! Click below to contact us for any suggestions.</p>
+                        <a href="#contact">Contact</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <a class="anchor" id="trim"></a>
+        <section id="trimsection">
+            <div class="shade">
+                <h2>Trim a Link</h2>
+                <form method="POST" action="{{url_for('home')}}">
+                    {{form1.csrf_token}}
+                    <div class="field" id="longfield">
+                        <div class="fieldcontent">
+                            {{form1.longurl}}
+                        </div>
+                        {% if form1.longurl.errors %}
+                        <div class="fielderrors">
+                            {% for error in form1.longurl.errors %}
+                            <a>{{error}}</a> {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="field" id="shortfield">
+                        <div class="fieldcontent">
+                            <a class="currenturl"></a>
+                            {{form1.shorturl}}
+                        </div>
+                        {% if form1.shorturl.errors %}
+                        <div class="fielderrors">
+                            {% for error in form1.shorturl.errors %}
+                            <a>{{error}}</a> {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="field">
+                        <div class="fieldcontent">
+                            {{form1.trimcaptcha}}
+                        </div>
+                        {% if form1.trimcaptcha.errors %}
+                        <div class="fielderrors">
+                            {% for error in form1.trimcaptcha.errors %}
+                            <a>{{error}}</a> {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="field">
+                        <div class="fieldcontent">
+                            {{form1.trim}}
+                        </div>
+                        {% if form1.trim.errors %}
+                        <div class="fielderrors">
+                            {% for error in form1.trim.errors %}
+                            <a>{{error}}</a> {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </form>
+                {% with flashed = get_flashed_messages(with_categories=true) %} {% if flashed %}
+                <div class="feedbackdiv">
+                    {% for category, message in flashed %} {% if category == "trimsuccess" %}
+                    <p class="feedback">Link saved successfully as <a class="feedbacklink" href="../{{message}}"><span class="currenturl"></span><span>{{message}}</span></a></p>
+                    <button id="copy" onclick="copy()">Copy Link</button> {% endif %} {% if category == "trimfailed" %}
+                    <p class="feedback">Error - {{message}}</p>
+                    {% endif %} {% endfor %}
+                </div>
+                {% endif %} {% endwith %}
+            </div>
+        </section>
+        <a class="anchor" id="contact"></a>
+        <section id="contactsection">
+            <div>
+                <h2>Contact</h2>
+                <form method="POST" action="{{url_for('home')}}">
+                    {{form2.csrf_token}}
+                    <div class="field" id="email">
+                        <div class="fieldcontent">
+                            {{form2.email}}
+                        </div>
+                        {% if form2.email.errors %}
+                        <div class="fielderrors">
+                            {% for error in form2.email.errors %}
+                            <a>{{error}}</a> {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="field" id="message">
+                        <div class="fieldcontent">
+                            {{form2.message}}
+                        </div>
+                        {% if form2.message.errors %}
+                        <div class="fielderrors">
+                            {% for error in form2.message.errors %}
+                            <a>{{error}}</a> {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="field">
+                        <div class="fieldcontent">
+                            {{form2.contactcaptcha}}
+                        </div>
+                        {% if form2.contactcaptcha.errors %}
+                        <div class="fielderrors">
+                            {% for error in form2.contactcaptcha.errors %}
+                            <a>{{error}}</a> {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="field">
+                        <div class="fieldcontent">
+                            {{form2.submit}}
+                        </div>
+                        {% if form2.submit.errors %}
+                        <div class="fielderrors">
+                            {% for error in form2.submit.errors %}
+                            <a>{{error}}</a> {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </form>
+                {% with flashed = get_flashed_messages(with_categories=true) %} {% if flashed %}
+                <div class=feedbackdiv>
+                    {% for category, message in flashed %} {% if category == "contactsuccess" %}
+                    <p class=feedback>{{message}}</p>
+                    {% endif %} {% endfor %}
+                </div>
+                {% endif %} {% endwith %}
+            </div>
+        </section>
+        <script src="../js/home.js"></script>
+    </main>
+    <footer>
+        <div>
+            <h3>A Hobby Project</h3>
+            <img src="../static/github.png">
+            <a href="https://github.com/Skytec711/TrimURL">Github Repository</a>
+        </div>
+        <div>
+            <h3>Images Used</h3>
+            <a href="https://www.vhv.rs/viewpic/ioJJxbm_scissors-in-a-circle-clip-art-hd-png/">Scissors in a circle clip art</a>
+            <a href="https://www.freepik.com/free-photo/minimalist-office-high-view-laptop-monstera_11234087.htm">Minimalist office high view laptop and monstera</a>
+            <a href="https://www.freepik.com/free-photo/top-view-desk-with-coffee-plant-laptop_4161892.htm">Top view desk with coffee, plant and laptop</a>
+            <a href="https://www.freepik.com/free-photo/front-view-notebook-cup-coffee-inspiration-mock-up-concept_7764849.htm">Front view of notebook and cup of coffee</a>
+            <a href="https://github.com/logos">Github icon</a>
+        </div>
+    </footer>
+</body>
+
+</html>
