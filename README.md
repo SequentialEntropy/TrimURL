@@ -13,8 +13,8 @@ Simple URL Shortener using Flask
   
   .env file should contain the following:
 ```
-RECAPTCHA_SITE_KEY=<Private Key from ReCaptcha>
-RECAPTCHA_SECRET_KEY=<Public Key from ReCaptcha>
+RECAPTCHA_SITE_KEY=<Public Key from ReCaptcha>
+RECAPTCHA_SECRET_KEY=<Private Key from ReCaptcha>
 SECRET_KEY=<Any string for secure form encryption>
 ```
 
