@@ -7,6 +7,10 @@ Simple URL Shortener using Flask
 
   `git clone https://github.com/Skytec711/TrimURL`
   
+- Install dependencies
+
+  `pip3 install -r requirements.txt`
+  
 - Add .env file
 
   `touch .env`
